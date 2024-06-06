@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+\begin{document}
+
+\begin{table}[htbp]
+  \centering
+  \begin{subtable}{0.45\linewidth}
+    \centering
+    \begin{tabular}{|l|l|l|l|}
+      \toprule
+      Header 1 & Header 2 & Header 3 \\
+      \midrule
+      Model & MSE & MSPE & R \\ \hline
+        3, 3, 7 & 1.759836876 & 574.5049685 & 0.989811423 \\ \hline
+        3, 4, 7 & 1.731402675 & 0.411242506 & 0.989016644 \\ \hline
+        3, 5, 7 & 2.239261048 & 0.046605445 & 0.989516182 \\ \hline
+        3, 6, 7 & 7.245819954 & 0.301812109 & 0.952578738 \\ \hline
+        3, 7, 7 & 6.093804967 & 0.61157323 & 0.968882853 \\ \hline
+        3, 8, 7 & 1.122540371 & 0.347061787 & 0.996658379 \\ \hline
+        3, 9, 7 & 2.221662759 & 0.275092713 & 0.98604176 \\ \hline
+        3, 10, 7 & 0.736067503 & 0.02042004 & 0.995502581 \\ \hline
+      \bottomrule
+    \end{tabular}
+    \caption{Table 1}
+    \label{tab:table1}
+  \end{subtable}%
+  \hspace{0.05\linewidth}% Adjust the space between tables
+  \begin{subtable}{0.45\linewidth}
+    \centering
+    \begin{tabular}|l|l|l|}
+      \toprule
+      Header X & Header Y & Header Z \\
+      \midrule
+       Model & MSE & MSPE & R \\ \hline
+        3, 3, 7 & 1.759836876 & 574.5049685 & 0.989811423 \\ \hline
+        3, 4, 7 & 1.731402675 & 0.411242506 & 0.989016644 \\ \hline
+        3, 5, 7 & 2.239261048 & 0.046605445 & 0.989516182 \\ \hline
+        3, 6, 7 & 7.245819954 & 0.301812109 & 0.952578738 \\ \hline
+        3, 7, 7 & 6.093804967 & 0.61157323 & 0.968882853 \\ \hline
+        3, 8, 7 & 1.122540371 & 0.347061787 & 0.996658379 \\ \hline
+        3, 9, 7 & 2.221662759 & 0.275092713 & 0.98604176 \\ \hline
+        3, 10, 7 & 0.736067503 & 0.02042004 & 0.995502581 \\ \hline
+      \bottomrule
+    \end{tabular}
+    \caption{Table 2}
+    \label{tab:table2}
+  \end{subtable}
+  \caption{Two Tables Side by Side}
+  \label{tab:two_tables}
+\end{table}
+
+\end{document}

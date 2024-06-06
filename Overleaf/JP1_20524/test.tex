@@ -1,0 +1,17 @@
+import matplotlib.pyplot as plt
+
+actual_ra = [10, 20, 30, 40]  # Example actual Ra values
+predicted_ra = [12, 22, 28, 35]  # Example predicted Ra values
+labels = ['Sample 1', 'Sample 2', 'Sample 3', 'Sample 4']  # Example labels
+
+x = range(len(actual_ra))
+
+plt.bar(x, actual_ra, width=0.4, label='Actual Ra')
+plt.bar(x, predicted_ra, width=0.4, label='Predicted Ra')
+
+plt.xlabel('Samples')
+plt.ylabel('Ra Values')
+plt.xticks(x, labels)
+plt.legend()
+
+plt.show()

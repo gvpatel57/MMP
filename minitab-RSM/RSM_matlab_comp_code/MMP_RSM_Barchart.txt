@@ -1,0 +1,28 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read the CSV file
+df = pd.read_csv("/content/drive/MyDrive/JP2/RSM_all5.csv")
+
+# Extract the required columns
+experiment_numbers = df.iloc[:, 0]  # Experiment numbers from column 1
+actual_ra = df.iloc[:, 4]  # Actual Ra values from column 5
+predicted_ra = df.iloc[:, 9]  # Predicted Ra values from column 10
+
+# Plotting the data
+plt.bar(experiment_numbers - 0.2, actual_ra, width=0.4, label='Actual Ra')
+plt.bar(experiment_numbers + 0.2, predicted_ra, width=0.4, label='Predicted Ra')
+
+# Adding labels and title
+plt.xlabel('Experiment Number')
+plt.ylabel('Actual Ra and predicted Ra')
+plt.title('Actual vs Predicted Ra Values by Experiment')
+plt.xticks(experiment_numbers)
+plt.legend()
+
+# Save the plot as JPG file
+plt.savefig('comp_Ra_pRa.jpg')
+
+# Show plot
+plt.tight_layout()
+plt.show()

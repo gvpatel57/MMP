@@ -1,0 +1,33 @@
+% Load training data for rz (variable 3)
+train_data_rz = readtable('traingd_train_actual_predicted_architecture_4.csv');
+actual_train_rz = train_data_rz.Actual_3;
+predicted_train_rz = train_data_rz.Predicted_3;
+serial_no_train_rz = (1:numel(actual_train_rz))';
+
+% Load testing data for rz (variable 3)
+test_data_rz = readtable('traingd_test_actual_predicted_architecture_8.csv');
+actual_test_rz = test_data_rz.Actual_3;
+predicted_test_rz = test_data_rz.Predicted_3;
+serial_no_test_rz = (1:numel(actual_test_rz))';
+
+% Plotting for rz training
+figure;
+plot(serial_no_train_rz, actual_train_rz, '-o', 'LineWidth', 1.5);
+hold on;
+plot(serial_no_train_rz, predicted_train_rz, '--o', 'LineWidth', 1.5);
+title('GD-training architecture(3,4,5)');
+xlabel('Exp Nos. of 5 folds');
+ylabel('Surface roughness (Rz)');
+legend('Actual', 'Predicted');
+grid on;
+
+% Plotting for rz Testing
+figure;
+plot(serial_no_test_rz, actual_test_rz, '-o', 'LineWidth', 1.5);
+hold on;
+plot(serial_no_test_rz, predicted_test_rz, '--o', 'LineWidth', 1.5);
+title('GD-Testing architecture(3,8,5)');
+xlabel('Exp Nos. of 5 folds');
+ylabel('Surface roughness (Rz)');
+legend('Actual', 'Predicted');
+grid on;

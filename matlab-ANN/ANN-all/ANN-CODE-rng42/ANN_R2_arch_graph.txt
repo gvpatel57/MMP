@@ -1,0 +1,36 @@
+% Initialize arrays to store R2 values for training and testing
+train_R2_values = zeros(8, 5);
+test_R2_values = zeros(8, 5);
+
+% Extract R2 values from the results structure
+for o = 1:length(optimizers)
+    for a = 1:8
+        train_R2_values(a, :) = results{o}.train_R2{a};
+        test_R2_values(a, :) = results{o}.test_R2{a};
+    end
+end
+
+% Number of architectures
+architectures = 3:10;
+
+% Plotting training R2 values
+figure;
+for i = 1:5
+    subplot(2, 4, i);
+    plot(architectures, train_R2_values(:, i), '-o');
+    title(['R-', num2str(i)]);
+    xlabel('Architecture No');
+    ylabel('R2');
+    grid on;
+end
+
+% Plotting testing R2 values
+figure;
+for i = 1:5
+    subplot(2, 4, i);
+    plot(architectures, test_R2_values(:, i), '-o');
+    title(['R-', num2str(i)]);
+    xlabel('Architecture No.');
+    ylabel('R2');
+    grid on;
+end

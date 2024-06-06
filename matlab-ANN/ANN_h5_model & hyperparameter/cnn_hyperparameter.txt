@@ -1,0 +1,128 @@
+
+
+# %% [code]
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
+from sklearn.metrics import mean_squared_error, mean_absolute_percentage_error, r2_score
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Conv1D, Flatten, Dropout
+from tensorflow.keras.optimizers import Adam, RMSprop
+
+# Load the CSV file
+data = pd.read_csv('edm_all5.csv')
+
+# Prepare the dataset
+input_cols = [2, 3, 4]
+output_cols = [5, 6, 7, 8, 9]
+
+X = data.iloc[:, input_cols].values
+y = data.iloc[:, output_cols].values
+
+# Impute NaN values
+imputer = SimpleImputer(strategy='mean')
+y = imputer.fit_transform(y)
+
+# Split the data into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Standardize the data
+scaler_X = StandardScaler()
+scaler_y = StandardScaler()
+
+X_train = scaler_X.fit_transform(X_train)
+X_test = scaler_X.transform(X_test)
+
+y_train = scaler_y.fit_transform(y_train)
+y_test = scaler_y.transform(y_test)
+
+# Check for NaNs in the scaled data
+print(f"NaN in X_train: {np.isnan(X_train).sum()}")
+print(f"NaN in X_test: {np.isnan(X_test).sum()}")
+print(f"NaN in y_train: {np.isnan(y_train).sum()}")
+print(f"NaN in y_test: {np.isnan(y_test).sum()}")
+
+# Define the CNN model with adjusted hyperparameters
+input_shape = (X_train.shape[1], 1)
+num_classes = y_train.shape[1]
+learning_rate = 0.0005  # Reduced learning rate
+batch_size = 16  # Smaller batch size
+epochs = 50  # Increased epochs
+filter_size = 2  # Reduced filter size to avoid excessive downsampling
+num_filters = 64  # Increased number of filters
+
+model = Sequential()
+model.add(Conv1D(filters=num_filters, kernel_size=filter_size, activation='relu', input_shape=input_shape, padding='same'))
+model.add(Conv1D(filters=num_filters*2, kernel_size=filter_size, activation='relu', padding='same'))  # Add padding to maintain the input size
+model.add(Flatten())
+model.add(Dense(256, activation='relu'))  # Increased neurons
+model.add(Dropout(0.3))  # Dropout for regularization
+model.add(Dense(num_classes))
+
+optimizer = RMSprop(learning_rate=learning_rate)  # Using RMSprop optimizer
+model.compile(optimizer=optimizer, loss='mse')
+
+# Reshape input data for Conv1D
+X_train_cnn = np.expand_dims(X_train, axis=2)
+X_test_cnn = np.expand_dims(X_test, axis=2)
+
+# Train the model
+model.fit(X_train_cnn, y_train, epochs=epochs, batch_size=batch_size, verbose=1)
+
+# Evaluate the model
+y_pred = model.predict(X_test_cnn)
+
+# Check for NaN values in the predictions
+print(f"NaN in predictions: {np.isnan(y_pred).sum()}")
+
+# Check for infinities in the predictions
+print(f"Infinities in predictions: {np.isinf(y_pred).sum()}")
+
+# Check if the predictions are all zeros
+print(f"Zero predictions: {(y_pred == 0).sum()}")
+
+# Inverse transform the predictions and true values
+y_pred = scaler_y.inverse_transform(y_pred)
+y_test = scaler_y.inverse_transform(y_test)
+
+# Check for NaN values after inverse transformation
+print(f"NaN in inverse-transformed predictions: {np.isnan(y_pred).sum()}")
+print(f"NaN in inverse-transformed test set: {np.isnan(y_test).sum()}")
+
+# Handle potential NaN values (if any)
+non_nan_indices = ~np.isnan(y_pred).any(axis=1) & ~np.isnan(y_test).any(axis=1)
+y_pred = y_pred[non_nan_indices]
+y_test = y_test[non_nan_indices]
+
+# Ensure there are samples left after removing NaN values
+if y_pred.shape[0] == 0 or y_test.shape[0] == 0:
+    raise ValueError("All samples contain NaN values after filtering. Cannot calculate metrics.")
+
+# Calculate metrics
+mse = mean_squared_error(y_test, y_pred)
+mape = mean_absolute_percentage_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+# Save hyperparameters and evaluation metrics to CSV
+hyperparameters = {
+    'input_cols': input_cols,
+    'output_cols': output_cols,
+    'input_shape': input_shape,
+    'num_classes': num_classes,
+    'learning_rate': learning_rate,
+    'batch_size': batch_size,
+    'epochs': epochs,
+    'filter_size': filter_size,
+    'num_filters': num_filters,
+    'mse': mse,
+    'mape': mape,
+    'r2': r2
+}
+
+hyper_df = pd.DataFrame([hyperparameters])
+hyper_df.to_csv('hyper.csv', index=False)
+
+print(f"MSE: {mse}, MAPE: {mape}, R-squared: {r2}")
+

@@ -1,0 +1,13 @@
+from tensorflow.keras.models import load_model
+
+# Load the saved model
+model = load_model('cnn_model_tuned.h5')
+
+# Display the model architecture
+model.summary()
+
+# Display model layers and their configuration
+for layer in model.layers:
+    print(layer.get_config())
+    print(layer.get_weights())
+    

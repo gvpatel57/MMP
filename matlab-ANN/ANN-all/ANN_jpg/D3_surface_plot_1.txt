@@ -1,0 +1,84 @@
+% Read the data from the CSV file
+filename = 'edm_all.csv';
+data = readtable(filename);
+
+% Extract the required columns
+X = data{:, 2}; % Column 2
+Y = data{:, 3}; % Column 3
+Z = data{:, 5}; % Column 5
+
+% Create a coarser grid for X and Y
+numPoints = 30; % Adjust the number of points for the grid to reduce mesh size
+Xq = linspace(min(X), max(X), numPoints);
+Yq = linspace(min(Y), max(Y), numPoints);
+[Xq, Yq] = meshgrid(Xq, Yq);
+
+% Interpolate Z values to fit the grid
+Zq = griddata(X, Y, Z, Xq, Yq, 'natural');
+
+% Create the 3D surface plot
+figure;
+meshHandle = mesh(Xq, Yq, Zq);
+
+% Set properties to enhance visibility
+meshHandle.FaceColor = 'interp';
+meshHandle.EdgeColor = 'k'; % Set edge color to black
+meshHandle.FaceAlpha = 0.5; % Set transparency
+
+% Use black and white colormap
+colormap(gray);
+
+% Add labels and title
+xlabel('X-axis');
+ylabel('Y-axis');
+zlabel('Z-axis');
+title('3D Surface Plot from CSV Data');
+
+% Add color bar
+colorbar;
+
+% Customize the view angle for better visualization
+view(-30, 30);
+
+% Add lighting for better depth perception
+camlight left;
+lighting phong;
+
+% Add grid lines to base planes
+hold on;
+
+% Get the limits of the axes
+xLimits = [min(Xq(:)), max(Xq(:))];
+yLimits = [min(Yq(:)), max(Yq(:))];
+zLimits = [min(Zq(:)), max(Zq(:))];
+
+% Draw lines around the x-y plane at z = min(Zq)
+plot3([xLimits(1), xLimits(2)], [yLimits(1), yLimits(1)], [zLimits(1), zLimits(1)], 'k-', 'LineWidth', 2);
+plot3([xLimits(1), xLimits(2)], [yLimits(2), yLimits(2)], [zLimits(1), zLimits(1)], 'k-', 'LineWidth', 2);
+plot3([xLimits(1), xLimits(1)], [yLimits(1), yLimits(2)], [zLimits(1), zLimits(1)], 'k-', 'LineWidth', 2);
+plot3([xLimits(2), xLimits(2)], [yLimits(1), yLimits(2)], [zLimits(1), zLimits(1)], 'k-', 'LineWidth', 2);
+
+% Draw lines around the z-x plane at y = min(Yq)
+plot3([xLimits(1), xLimits(2)], [yLimits(1), yLimits(1)], [zLimits(1), zLimits(1)], 'k-', 'LineWidth', 2);
+plot3([xLimits(1), xLimits(2)], [yLimits(1), yLimits(1)], [zLimits(2), zLimits(2)], 'k-', 'LineWidth', 2);
+plot3([xLimits(1), xLimits(1)], [yLimits(1), yLimits(1)], [zLimits(1), zLimits(2)], 'k-', 'LineWidth', 2);
+plot3([xLimits(2), xLimits(2)], [yLimits(1), yLimits(1)], [zLimits(1), zLimits(2)], 'k-', 'LineWidth', 2);
+
+% Draw lines around the z-y plane at x = min(Xq)
+plot3([xLimits(1), xLimits(1)], [yLimits(1), yLimits(2)], [zLimits(1), zLimits(1)], 'k-', 'LineWidth', 2);
+plot3([xLimits(1), xLimits(1)], [yLimits(1), yLimits(2)], [zLimits(2), zLimits(2)], 'k-', 'LineWidth', 2);
+plot3([xLimits(1), xLimits(1)], [yLimits(1), yLimits(1)], [zLimits(1), zLimits(2)], 'k-', 'LineWidth', 2);
+plot3([xLimits(1), xLimits(1)], [yLimits(2), yLimits(2)], [zLimits(1), zLimits(2)], 'k-', 'LineWidth', 2);
+
+hold off;
+
+% Set axis limits for better visualization
+xlim(xLimits);
+ylim(yLimits);
+zlim(zLimits);
+
+% Turn on the grid
+grid on;
+
+% Save the figure as a JPEG file
+saveas(gcf, 'figure_1.jpg');

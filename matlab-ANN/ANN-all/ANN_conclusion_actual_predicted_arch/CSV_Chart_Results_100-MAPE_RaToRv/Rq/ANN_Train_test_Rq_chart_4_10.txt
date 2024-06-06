@@ -1,0 +1,33 @@
+% Load trqining data for rq (variable 1)
+train_data_rq = readtable('trainlm_train_actual_predicted_architecture_4.csv');
+actual_train_rq = train_data_rq.Actual_3;
+predicted_train_rq = train_data_rq.Predicted_3;
+serial_no_train_rq = (1:numel(actual_train_rq))';
+
+% Load testing data for rq (variable 1)
+test_data_rq = readtable('trainlm_test_actual_predicted_architecture_10.csv');
+actual_test_rq = test_data_rq.Actual_3;
+predicted_test_rq = test_data_rq.Predicted_3;
+serial_no_test_rq = (1:numel(actual_test_rq))';
+
+% Plotting for rq Training
+figure;
+plot(serial_no_train_rq, actual_train_rq, '-o', 'LineWidth', 1.5);
+hold on;
+plot(serial_no_train_rq, predicted_train_rq, '--o', 'LineWidth', 1.5);
+title('LM-Training architecture(3,4,5)');
+xlabel('Exp Nos. of 5 folds');
+ylabel('Surface roughness (Rq)');
+legend('Actual', 'Predicted');
+grid on;
+
+% Plotting for rq Testing
+figure;
+plot(serial_no_test_rq, actual_test_rq, '-o', 'LineWidth', 1.5);
+hold on;
+plot(serial_no_test_rq, predicted_test_rq, '--o', 'LineWidth', 1.5);
+title('LM-Testing architecture(3,10,5)');
+xlabel('Exp Nos. of 5 folds');
+ylabel('Surface roughness (Rq)');
+legend('Actual', 'Predicted');
+grid on;

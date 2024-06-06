@@ -1,0 +1,33 @@
+% Load training data for Rp (variable 4)
+train_data_rp = readtable('traingd_train_actual_predicted_architecture_7.csv');
+actual_train_rp = train_data_rp.Actual_4;
+predicted_train_rp = train_data_rp.Predicted_4;
+serial_no_train_rp = (1:numel(actual_train_rp))';
+
+% Load testing data for Rp15:34 26-05-2024  (variable 4)
+test_data_rp = readtable('trainrp_test_actual_predicted_architecture_4.csv');
+actual_test_rp = test_data_rp.Actual_4;
+predicted_test_rp = test_data_rp.Predicted_4;
+serial_no_test_rp = (1:numel(actual_test_rp))';
+
+% Plotting for Rp Training
+figure;
+plot(serial_no_train_rp, actual_train_rp, '-o', 'LineWidth', 1.5);
+hold on;
+plot(serial_no_train_rp, predicted_train_rp, '--o', 'LineWidth', 1.5);
+title('GD-Training architecture(3,7,5)');
+xlabel('Exp Nos. of 5 folds');
+ylabel('Surface roughness (Rp)');
+legend('Actual', 'Predicted');
+grid on;
+
+% Plotting for Rp Testing
+figure;
+plot(serial_no_test_rp, actual_test_rp, '-o', 'LineWidth', 1.5);
+hold on;
+plot(serial_no_test_rp, predicted_test_rp, '--o', 'LineWidth', 1.5);
+title('RP-Testing architecture(3,4,5)');
+xlabel('Exp Nos. of 5 folds');
+ylabel('Surface roughness (Rp)');
+legend('Actual', 'Predicted');
+grid on;

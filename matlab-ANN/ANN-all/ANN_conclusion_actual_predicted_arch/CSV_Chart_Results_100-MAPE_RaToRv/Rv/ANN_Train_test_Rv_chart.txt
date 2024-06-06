@@ -1,0 +1,33 @@
+% Load training data for rv (variable 1)
+train_data_rv = readtable('trainlm_train_actual_predicted_architecture_4.csv');
+actual_train_rv = train_data_rv.Actual_5;
+predicted_train_rv = train_data_rv.Predicted_5;
+serial_no_train_rv = (1:numel(actual_train_rv))';
+
+% Load testing data for rv (variable 1)
+test_data_rv = readtable('trainlm_test_actual_predicted_architecture_3.csv');
+actual_test_rv = test_data_rv.Actual_5;
+predicted_test_rv = test_data_rv.Predicted_5;
+serial_no_test_rv = (1:numel(actual_test_rv))';
+
+% Plotting for rv training
+figure;
+plot(serial_no_train_rv, actual_train_rv, '-o', 'LineWidth', 1.5);
+hold on;
+plot(serial_no_train_rv, predicted_train_rv, '--o', 'LineWidth', 1.5);
+title('LM-training architecture(3,4,5)');
+xlabel('Exp Nos. of 5 folds');
+ylabel('Surface roughness (Rv)');
+legend('Actual', 'Predicted');
+grid on;
+
+% Plotting for rv Testing
+figure;
+plot(serial_no_test_rv, actual_test_rv, '-o', 'LineWidth', 1.5);
+hold on;
+plot(serial_no_test_rv, predicted_test_rv, '--o', 'LineWidth', 1.5);
+title('LM-Testing architecture(3,3,5)');
+xlabel('Exp Nos. of 5 folds');
+ylabel('Surface roughness (Rv)');
+legend('Actual', 'Predicted');
+grid on;
